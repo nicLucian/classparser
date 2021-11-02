@@ -2,11 +2,17 @@ package com.oribit.classparser.constant;
 
 import static com.oribit.classparser.util.Reader.readInt;
 
+/**
+ * CONSTANT_Float_info {
+ *     u1 tag;
+ *     u4 bytes;
+ * }
+ */
 public class ConstantFloat implements Constant {
-    private int mTag;
+    private byte mTag;
     private float mValue;
 
-    public ConstantFloat(int tag, float value) {
+    public ConstantFloat(byte tag, float value) {
         mTag = tag;
         mValue = value;
     }
@@ -17,7 +23,7 @@ public class ConstantFloat implements Constant {
     }
 
     @Override
-    public int tag() {
+    public byte tag() {
         return mTag;
     }
 
@@ -25,9 +31,9 @@ public class ConstantFloat implements Constant {
         return mValue;
     }
 
-    public static class FloatParser implements ConstantParser {
+    public static class Parser implements ConstantParser {
         @Override
-        public Constant parse(byte[] content, int tag, int currentOffset) {
+        public Constant parse(byte[] content, byte tag, int currentOffset) {
             int bits = readInt(content, currentOffset);
             int s = ((bits >> 31) == 0) ? 1 : -1;
             int e = ((bits >> 23) & 0xff);

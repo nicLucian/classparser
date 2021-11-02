@@ -2,12 +2,31 @@ package com.oribit.classparser.constant;
 
 import static com.oribit.classparser.util.Reader.readShort;
 
+/**
+ * CONSTANT_Fieldref_info {
+ *     u1 tag;
+ *     u2 class_index;
+ *     u2 name_and_type_index;
+ * }
+ *
+ * CONSTANT_Methodref_info {
+ *     u1 tag;
+ *     u2 class_index;
+ *     u2 name_and_type_index;
+ * }
+ *
+ * CONSTANT_InterfaceMethodref_info {
+ *     u1 tag;
+ *     u2 class_index;
+ *     u2 name_and_type_index;
+ * }
+ */
 public class ConstantReference implements Constant {
-    private final int mTag;
-    private final int mClassIndex;
-    private final int mNameAndTypeIndex;
+    private final byte mTag;
+    private final short mClassIndex;
+    private final short mNameAndTypeIndex;
 
-    public ConstantReference(int tag, int classIndex, int nameAndTypeIndex) {
+    public ConstantReference(byte tag, short classIndex, short nameAndTypeIndex) {
         mTag = tag;
         mClassIndex = classIndex;
         mNameAndTypeIndex = nameAndTypeIndex;
@@ -19,7 +38,7 @@ public class ConstantReference implements Constant {
     }
 
     @Override
-    public int tag() {
+    public byte tag() {
         return mTag;
     }
 
@@ -31,11 +50,11 @@ public class ConstantReference implements Constant {
         return mNameAndTypeIndex;
     }
 
-    public static class ReferenceParser implements ConstantParser {
+    public static class Parser implements ConstantParser {
         @Override
-        public Constant parse(byte[] content, int tag, int currentOffset) {
-            int classIndex = readShort(content, currentOffset);
-            int nameAndTypeIndex = readShort(content, currentOffset + 2);
+        public Constant parse(byte[] content, byte tag, int currentOffset) {
+            short classIndex = readShort(content, currentOffset);
+            short nameAndTypeIndex = readShort(content, currentOffset + 2);
             return new ConstantReference(tag, classIndex, nameAndTypeIndex);
         }
     }

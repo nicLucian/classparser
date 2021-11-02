@@ -2,11 +2,17 @@ package com.oribit.classparser.constant;
 
 import static com.oribit.classparser.util.Reader.readShort;
 
+/**
+ * CONSTANT_Class_info {
+ *     u1 tag;
+ *     u2 name_index;
+ * }
+ */
 public class ConstantClass implements Constant {
-    private final int mTag;
-    private final int mNameIndex;
+    private final byte mTag;
+    private final short mNameIndex;
 
-    public ConstantClass(int tag, int nameIndex) {
+    public ConstantClass(byte tag, short nameIndex) {
         mTag = tag;
         mNameIndex = nameIndex;
     }
@@ -17,7 +23,7 @@ public class ConstantClass implements Constant {
     }
 
     @Override
-    public int tag() {
+    public byte tag() {
         return mTag;
     }
 
@@ -27,8 +33,8 @@ public class ConstantClass implements Constant {
 
     public static class ClassParser implements ConstantParser {
         @Override
-        public Constant parse(byte[] content, int tag, int currentOffset) {
-            int nameIndex = readShort(content, currentOffset);
+        public Constant parse(byte[] content, byte tag, int currentOffset) {
+            short nameIndex = readShort(content, currentOffset);
             System.out.println("name index = " + nameIndex);
             return new ConstantClass(tag, nameIndex);
         }

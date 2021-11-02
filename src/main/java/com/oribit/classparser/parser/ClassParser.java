@@ -25,12 +25,12 @@ public class ClassParser {
         //Defence code in case of that Parsers will modify this data accidentally
         System.arraycopy(mContent, 0, copiedContent, 0, mContent.length);
 
-        int constantPoolSize = readShort(copiedContent, poolOffset);
+        short constantPoolSize = readShort(copiedContent, poolOffset);
         poolOffset += 2;
         mConstants = new Constant[constantPoolSize - 1];
         for (int i = 0; i < constantPoolSize - 1; i++) {
-            int tag = mContent[poolOffset] & 0xFF;
-            Constant.ConstantParser parser = getConstantParser(tag);
+            byte tag = mContent[poolOffset];
+            Constant.ConstantParser parser = Constant.ParserFactory.getParser(tag);
             Constant constant = parser.parse(copiedContent, tag, poolOffset + 1);
             poolOffset += constant.size();
             mConstants[i] = constant;
@@ -38,47 +38,10 @@ public class ClassParser {
         mCurrentOffset += poolOffset;
     }
 
-    private Constant.ConstantParser getConstantParser(int tag) {
-        switch (tag) {
-            case Constant.CONSTANT_Class:
-                return new ConstantClass.ClassParser();
-
-            case Constant.CONSTANT_Methodref:
-            case Constant.CONSTANT_Fieldref:
-            case Constant.CONSTANT_InterfaceMethodref:
-                return new ConstantReference.ReferenceParser();
-
-            case Constant.CONSTANT_String:
-                return new ConstantString.StringParser();
-
-            case Constant.CONSTANT_Integer:
-                return new ConstantInteger.IntegerParser();
-
-            case Constant.CONSTANT_Float:
-                return new ConstantFloat.FloatParser();
-
-            case Constant.CONSTANT_Long:
-                return new ConstantLong.LongParser();
-
-            default:
-                return (content, tag1, currentOffset) -> new Constant() {
-                    @Override
-                    public int size() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int tag() {
-                        return 0;
-                    }
-                };
-        }
-    }
-
     private void parseVersion() {
-        int minorVersion = readShort(mContent, mCurrentOffset);
+        short minorVersion = readShort(mContent, mCurrentOffset);
         mCurrentOffset += 2;
-        int majorVersion = readShort(mContent, mCurrentOffset);
+        short majorVersion = readShort(mContent, mCurrentOffset);
         mCurrentOffset += 2;
     }
 
