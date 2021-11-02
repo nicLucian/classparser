@@ -1,4 +1,4 @@
-package com.oribit.classparser.constant;
+package com.oribit.classparser.constant_pool;
 
 import static com.oribit.classparser.util.Reader.readShort;
 
@@ -16,6 +16,7 @@ public class ConstantUtf8 implements Constant {
     private String mContent;
 
     public ConstantUtf8(byte tag, short length, byte[] rawBytes) {
+        mTag = tag;
         mLength = length;
         mRawBytes = rawBytes;
         mContent = new String(mRawBytes);

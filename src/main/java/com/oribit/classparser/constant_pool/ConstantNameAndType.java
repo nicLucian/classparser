@@ -1,4 +1,4 @@
-package com.oribit.classparser.constant;
+package com.oribit.classparser.constant_pool;
 
 import static com.oribit.classparser.util.Reader.readShort;
 
@@ -27,7 +27,7 @@ public class ConstantNameAndType implements Constant {
 
     @Override
     public byte tag() {
-        return 0;
+        return mTag;
     }
 
     public int getNameIndex() {

@@ -1,4 +1,4 @@
-package com.oribit.classparser.constant;
+package com.oribit.classparser.constant_pool;
 
 import static com.oribit.classparser.util.Reader.readShort;
 
@@ -35,7 +35,6 @@ public class ConstantClass implements Constant {
         @Override
         public Constant parse(byte[] content, byte tag, int currentOffset) {
             short nameIndex = readShort(content, currentOffset);
-            System.out.println("name index = " + nameIndex);
             return new ConstantClass(tag, nameIndex);
         }
     }

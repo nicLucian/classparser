@@ -1,4 +1,4 @@
-package com.oribit.classparser.constant;
+package com.oribit.classparser.constant_pool;
 
 import static com.oribit.classparser.util.Reader.readShort;
 
