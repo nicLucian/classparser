@@ -43,9 +43,33 @@ public class ClassParser {
         parseSuperClass();
         parseInterfaces();
         parseFields();
+        parseMethods();
+        parseAttributes();
+    }
+
+    private void parseAttributes() {
         //todo
-        //parseMethods();
-        //parseAttributes();
+    }
+
+    private void parseMethods() {
+        int methodOffset = mCurrentOffset;
+        short methodsCount = readShort(mContent, methodOffset);
+        methodOffset += 2;
+
+        for (short i = 0; i < methodsCount; i++) {
+            short accessFlag = readShort(mContent, methodOffset);
+            short nameIndex = readShort(mContent, methodOffset + 2);
+            short descriptorIndex = readShort(mContent, methodOffset + 4);
+            System.out.println(accessFlag + " " + readUtf8(nameIndex) + " " + readUtf8(descriptorIndex));
+            short attributeCount = readShort(mContent, methodOffset + 6);
+            methodOffset += 8;
+            for (short j = 0; j < attributeCount; j++) {
+                short attributeNameIndex = readShort(mContent, methodOffset);
+                int attributeLength = readInt(mContent, methodOffset + 2);
+                methodOffset += (6 + attributeLength);
+            }
+        }
+        mCurrentOffset = methodOffset;
     }
 
     private void parseFields() {
